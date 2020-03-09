@@ -13,9 +13,14 @@ public class DirectoryDemo {
 
             name = pathFromURL.substring(1);
 
-
-
         return name;
+    }
+
+    
+
+    public boolean doesExist(String path){
+        File f = new File(path);
+        return f.exists();
     }
 
     public String processHtml(ArrayList<String>links ){

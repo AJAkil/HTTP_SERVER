@@ -47,9 +47,11 @@ public class HTTPServerSkeleton {
             System.out.println("The response is: "+input);
 
             if(input != null){
-                System.out.println(d.processPath(input));
+                //System.out.println(d.processPath(input));
                 content = d.processHtml(d.ShowDirectory(d.processPath(input)));
             }
+
+
 
             //content = "<html><a href=\"dire,root\">link text</a></html>";
             if(input == null) continue;
