@@ -52,19 +52,25 @@ public class HTTPServerSkeleton {
                 //System.out.println(d.processPath(input));
                 String path = d.processPath(input);
 
+                if(d.doesExist(path)){
+                    status = "200 OK";
+                    if(d.isDirectory(path)){
+                        content = d.processHtml(d.ShowDirectory(path));
+                        mimeType = "text/html";
+                    }else{
 
+                        String extension = d.getExtension(path);
+                        mimeType = d.procssMINEType(extension);
+                        System.out.println(extension);
+                        content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/'))));
+                        System.out.println("Not a folder");
+                    }
 
-                if(d.isDirectory(path)){
-                    content = d.processHtml(d.ShowDirectory(path));
-                    mimeType = "text/html";
                 }else{
-
-                    String extension = d.getExtension(path);
-                    mimeType = d.procssMINEType(extension);
-                    System.out.println(extension);
-                    content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/'))));
-                    System.out.println("Not a folder");
+                    status = "404 NOT FOUND";
                 }
+
+
             }
 
 
@@ -74,7 +80,7 @@ public class HTTPServerSkeleton {
             if(input.length() > 0) {
                 if(input.startsWith("GET"))
                 {
-                    pr.write("HTTP/1.1 200 OK\r\n");
+                    pr.write("HTTP/1.1 "+status+"\r\n");
                     pr.write("Server: Java HTTP Server: 1.0\r\n");
                     pr.write("Date: " + new Date() + "\r\n");
                     pr.write("Content-Type: "+mimeType+"\r\n");
