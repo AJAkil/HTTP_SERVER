@@ -38,6 +38,8 @@ public class HTTPServerSkeleton {
 
         String content = sb.toString();
         DirectoryDemo d = new DirectoryDemo();
+        String mimeType = null;
+        String status = null;
         while(true)
         {
             Socket s = serverConnect.accept();
@@ -48,7 +50,17 @@ public class HTTPServerSkeleton {
 
             if(input != null){
                 //System.out.println(d.processPath(input));
-                content = d.processHtml(d.ShowDirectory(d.processPath(input)));
+                String path = d.processPath(input);
+
+
+
+                if(d.isDirectory(path)){
+                    content = d.processHtml(d.ShowDirectory(path));
+                }else{
+                    
+                    content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/')+1)));
+                    System.out.println("Not a folder");
+                }
             }
 
 

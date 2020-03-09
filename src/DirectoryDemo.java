@@ -3,20 +3,36 @@ import java.util.ArrayList;
 
 public class DirectoryDemo {
 
+    public String getExtension(String path){
+        String[] array = path.split(".");
+        return array[array.length-1];
+    }
+
+    /*public String showErrorScreen(){
+
+    }*/
+
+
+
     public String processPath(String path){
         String name = null;
 
-
             String[]separatedValues = path.split(" ");
             String pathFromURL = separatedValues[1];
-            System.out.println("The path from URL is : " + pathFromURL);
+            //System.out.println("The path from URL is : " + pathFromURL);
 
             name = pathFromURL.substring(1);
 
         return name;
     }
 
-    
+    public boolean isDirectory(String path){
+        File f = new File(path);
+        if(f.isDirectory()) return true;
+        return false;
+    }
+
+
 
     public boolean doesExist(String path){
         File f = new File(path);
@@ -57,8 +73,12 @@ public class DirectoryDemo {
                     System.out.println("Inserting this to the list: "+pathName+"/"+s[i]);
                     generatedlinks.add("<p><b><a href=\""+"/"+f1.getPath()+"/"+s[i]+"\">"+s[i]+"</a></b></p>");
                     //System.out.println(s[i] + " is a directory");
+
                 } else {
-                    generatedlinks.add("<p><a href=\""+""+s[i]+"\">"+s[i]+"</a></p>");
+
+                    System.out.println("The file name is: "+f.getName());
+                    System.out.println("Pathname in file: "+pathName);
+                    generatedlinks.add("<p><a href=\""+"/"+f1.getPath()+"/"+s[i]+"\">"+s[i]+"</a></p>");
                     //System.out.println(s[i] + " is a file");
                 }
             }
