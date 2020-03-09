@@ -56,9 +56,13 @@ public class HTTPServerSkeleton {
 
                 if(d.isDirectory(path)){
                     content = d.processHtml(d.ShowDirectory(path));
+                    mimeType = "text/html";
                 }else{
-                    
-                    content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/')+1)));
+
+                    String extension = d.getExtension(path);
+                    mimeType = d.procssMINEType(extension);
+                    System.out.println(extension);
+                    content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/'))));
                     System.out.println("Not a folder");
                 }
             }
@@ -73,7 +77,7 @@ public class HTTPServerSkeleton {
                     pr.write("HTTP/1.1 200 OK\r\n");
                     pr.write("Server: Java HTTP Server: 1.0\r\n");
                     pr.write("Date: " + new Date() + "\r\n");
-                    pr.write("Content-Type: text/html\r\n");
+                    pr.write("Content-Type: "+mimeType+"\r\n");
                     pr.write("Content-Length: " + content.length() + "\r\n");
                     pr.write("\r\n");
                     pr.write(content);

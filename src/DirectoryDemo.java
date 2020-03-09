@@ -4,8 +4,20 @@ import java.util.ArrayList;
 public class DirectoryDemo {
 
     public String getExtension(String path){
-        String[] array = path.split(".");
-        return array[array.length-1];
+        System.out.println(path);
+        return path.substring(path.lastIndexOf("."));
+    }
+
+    public String procssMINEType(String ext){
+        switch (ext){
+            case ".txt" : return "text/plain" ;
+            case  ".jpeg" : return "image/jpeg";
+            case ".jpg": return "image/jpg";
+            case ".pdf": return "application/pdf";
+            case ".gif": return "image/gif";
+            case ".docx": return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        }
+        return null;
     }
 
     /*public String showErrorScreen(){
