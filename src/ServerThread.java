@@ -9,7 +9,30 @@ public class ServerThread extends Thread {
     PrintWriter pr = null;
     ServerThread(Socket socket) throws IOException {
         this.socket = socket;
+    }
 
+    public  void sendPacketdata(ObjectOutputStream out, String path){
+        byte[] bytearray = new byte[1024];
+        FileInputStream in = null;
+        try {
+            File f = new File(path);
+            in = new FileInputStream(f);
+            BufferedInputStream bis = new BufferedInputStream(in);
+            System.out.println(f.length());
+            int sum = 0;
+
+            int readLength = -1;
+            while ((readLength = bis.read(bytearray))>0){
+                sum+=readLength;
+                out.write(bytearray,0,readLength);
+            }
+            System.out.println("Total sent: "+sum);
+            bis.close();
+            out.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -25,7 +48,6 @@ public class ServerThread extends Thread {
                 this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("exception khachhe ekhne");
             }
             try {
                 input = this.in.readLine();
@@ -107,11 +129,10 @@ public class ServerThread extends Thread {
                             System.out.println("404 PAGE NOT FOUND");
                             try {
                                 pr = new PrintWriter(this.socket.getOutputStream());
-
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            content = d.processHtml(d.ShowDirectory(path));
+
                             mimeType = "text/html";
                             content = "<html>\n" +
                                     "\t<head>\n" +
@@ -130,9 +151,7 @@ public class ServerThread extends Thread {
                             pr.write("\r\n");
                             pr.write(content);
                             pr.flush();
-
                         }
-
                     }
                     else if(input.startsWith("UPLOAD "))
                     {
@@ -147,8 +166,8 @@ public class ServerThread extends Thread {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("exception khachhe naki ekhne");
             }
-
     }
+
+    
 }

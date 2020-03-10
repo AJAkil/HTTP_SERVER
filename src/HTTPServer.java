@@ -14,11 +14,15 @@ public class HTTPServer {
             File f = new File(path);
             in = new FileInputStream(f);
             BufferedInputStream bis = new BufferedInputStream(in);
+            System.out.println(f.length());
+            int sum = 0;
 
             int readLength = -1;
             while ((readLength = bis.read(bytearray))>0){
+                sum+=readLength;
                 out.write(bytearray,0,readLength);
             }
+            System.out.println("Total sent: "+sum);
             bis.close();
             out.close();
 
@@ -97,11 +101,12 @@ public class HTTPServer {
                             //ds.writeBytes("filename=\"send.txt\"\r\n");
                             ds.writeBytes("Content-Length: " + Long.toString(f.length())+ "\r\n");
                             ds.writeBytes("\r\n");
-                            File file = new File(path);
+                            /*File file = new File(path);
                             byte [] array = Files.readAllBytes(file.toPath());
                             System.out.println("ekhne");
                             ds.write(array);
-                            System.out.println("upto here");
+                            System.out.println("upto here");*/
+                            sendPacketdata(out,path);
                             out.close();
 
                         }
