@@ -6,29 +6,28 @@ import java.util.Date;
 public class ServerThread extends Thread {
     Socket socket;
     BufferedReader in;
-    PrintWriter pr = null;
+    BufferedOutputStream pr = null;
     ServerThread(Socket socket) throws IOException {
         this.socket = socket;
     }
 
-    public  void sendPacketdata(ObjectOutputStream out, String path){
+    public  void sendPacketdata(BufferedOutputStream bos, String path) throws IOException {
         byte[] bytearray = new byte[1024];
         FileInputStream in = null;
         try {
             File f = new File(path);
             in = new FileInputStream(f);
             BufferedInputStream bis = new BufferedInputStream(in);
-            System.out.println(f.length());
-            int sum = 0;
 
             int readLength = -1;
             while ((readLength = bis.read(bytearray))>0){
-                sum+=readLength;
-                out.write(bytearray,0,readLength);
+                bos.write(bytearray,0,readLength);
             }
-            System.out.println("Total sent: "+sum);
-            bis.close();
-            out.close();
+
+            //System.out.println("Total sent: "+sum);
+            //bos.flush();
+            //bis.close();
+            //bos.close();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -46,6 +45,7 @@ public class ServerThread extends Thread {
             String input = null;
             try {
                 this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+                pr = new BufferedOutputStream(this.socket.getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -63,76 +63,46 @@ public class ServerThread extends Thread {
                             status = "200 OK";
                             if(d.isDirectory(path)){
 
-                                try {
-                                    pr = new PrintWriter(this.socket.getOutputStream());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
                                 content = d.processHtml(d.ShowDirectory(path));
                                 mimeType = "text/html";
 
                                 //common for now
-                                pr.write("HTTP/1.1 "+status+"\r\n");
-                                pr.write("Server: Java HTTP Server: 1.0\r\n");
-                                pr.write("Date: " + new Date() + "\r\n");
-                                pr.write("Content-Type: "+mimeType+"\r\n");
-                                pr.write("Content-Length: " + content.length() + "\r\n");
-                                pr.write("\r\n");
-                                pr.write(content);
+                                pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                                pr.write("Server: Java HTTP Server: 1.0\r\n".getBytes());
+                                pr.write(("Date: " + new Date() + "\r\n").getBytes());
+                                pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                                pr.write(("Content-Length: " + content.length() + "\r\n").getBytes());
+                                pr.write("\r\n".getBytes());
+                                pr.write(content.getBytes());
                                 pr.flush();
 
                             }else{
 
                                 String extension = d.getExtension(path);
                                 mimeType = d.procssMINEType(extension);
-                                System.out.println(extension);
+                                //System.out.println(extension);
                                 //content = d.processHtml(d.ShowDirectory(path.substring(0,path.lastIndexOf('/'))));
-                                System.out.println("Not a folder");
+                                //System.out.println("Not a folder");
 
-                                ObjectOutputStream out = null;
-                                try {
-                                    out = new ObjectOutputStream(this.socket.getOutputStream());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                DataOutputStream ds = new DataOutputStream(out);
                                 File f = new File(path);
-
-                                //out.writeObject("HTTP/1.1 "+status+"\r\n");
-                                try {
-                                    ds.writeBytes("HTTP/1.1 "+status+"\r\n");
-                                    //out.writeObject("Server: Java HTTP Server: 1.0\n");
-                                    ds.writeBytes("Server: Java HTTP Server: 1.0\n");
-                                    //out.writeObject("Date: " + new Date() + "\r\n");
-                                    ds.writeBytes("Date: " + new Date() + "\r\n");
-                                    ds.writeBytes("Content-Type: "+mimeType+"\r\n");
-                                    //ds.writeBytes("Content-Type: application/x-forcedownload\r\n");
-                                    //ds.writeBytes("Content-Disposition: attachment\r\n");
-                                    //ds.writeBytes("filename=\"send.txt\"\r\n");
-                                    ds.writeBytes("Content-Length: " + Long.toString(f.length())+ "\r\n");
-                                    ds.writeBytes("\r\n");
-                                    File file = new File(path);
-                                    byte [] array = Files.readAllBytes(file.toPath());
-                                    System.out.println("ekhne");
-                                    ds.write(array);
-                                    System.out.println("upto here");
-                                    out.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                String fname = d.getFileName(path);
+                                pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                                pr.write("Server: Java HTTP Server: 1.0\n".getBytes());
+                                pr.write(("Date: " + new Date() + "\r\n").getBytes());
+                                pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                                pr.write("Content-Disposition: attachment\r\n".getBytes());
+                                pr.write(("filename=\""+fname+"\"\r\n").getBytes());
+                                pr.write("\r\n".getBytes());
+                                //bos.write(("Content-Length: " + Long.toString(f.length())+ "\r\n").getBytes());
+                                sendPacketdata(pr,path);
+                                pr.flush();
 
                             }
 
                         }else{
                             status = "404 PAGE NOT FOUND";
                             System.out.println("404 PAGE NOT FOUND");
-                            try {
-                                pr = new PrintWriter(this.socket.getOutputStream());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                            content = d.processHtml(d.ShowDirectory(path));
                             mimeType = "text/html";
                             content = "<html>\n" +
                                     "\t<head>\n" +
@@ -143,13 +113,13 @@ public class ServerThread extends Thread {
                                     "\t</body>\n" +
                                     "</html>";
 
-                            pr.write("HTTP/1.1 "+status+"\r\n");
-                            pr.write("Server: Java HTTP Server: 1.0\r\n");
-                            pr.write("Date: " + new Date() + "\r\n");
-                            pr.write("Content-Type: "+mimeType+"\r\n");
-                            pr.write("Content-Length: " + content.length() + "\r\n");
-                            pr.write("\r\n");
-                            pr.write(content);
+                            pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                            pr.write("Server: Java HTTP Server: 1.0\r\n".getBytes());
+                            pr.write(("Date: " + new Date() + "\r\n").getBytes());
+                            pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                            pr.write(("Content-Length: " + content.length() + "\r\n").getBytes());
+                            pr.write("\r\n".getBytes());
+                            pr.write(content.getBytes());
                             pr.flush();
                         }
                     }

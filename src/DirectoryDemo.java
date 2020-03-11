@@ -74,7 +74,7 @@ public class DirectoryDemo {
     }
 
     public ArrayList<String> ShowDirectory(String pathName){
-        System.out.println("The path name is: "+pathName);
+        //System.out.println("The path name is: "+pathName);
        ArrayList <String> generatedlinks = new ArrayList<>();
 
         String dirname = pathName;
@@ -86,14 +86,14 @@ public class DirectoryDemo {
             for (int i = 0; i < s.length; i++) {
                 File f = new File(dirname + "/" + s[i]);
                 if (f.isDirectory()) {
-                    System.out.println("Inserting this to the list: "+pathName+"/"+s[i]);
+                    //System.out.println("Inserting this to the list: "+pathName+"/"+s[i]);
                     generatedlinks.add("<p><b><a href=\""+"/"+f1.getPath()+"/"+s[i]+"\">"+s[i]+"</a></b></p>");
                     //System.out.println(s[i] + " is a directory");
 
                 } else {
 
-                    System.out.println("The file name is: "+f.getName());
-                    System.out.println("Pathname in file: "+pathName);
+                    //System.out.println("The file name is: "+f.getName());
+                    //System.out.println("Pathname in file: "+pathName);
                     generatedlinks.add("<p><a href=\""+"/"+f1.getPath()+"/"+s[i]+"\">"+s[i]+"</a></p>");
                     //System.out.println(s[i] + " is a file");
                 }
@@ -101,7 +101,7 @@ public class DirectoryDemo {
 
 
         } else {
-            System.out.println(dirname + " is not a directory");
+            //System.out.println(dirname + " is not a directory");
         }
 
 
