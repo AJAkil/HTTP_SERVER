@@ -53,8 +53,8 @@ public class ServerThread extends Thread {
                 input = this.in.readLine();
                 System.out.println("The response is: "+input);
 
-                if(input == null) ;
-                if(input.length() > 0) {
+                if(input == null){} ;
+                if(input.length() > 0 && input!= null) {
                     if(input.startsWith("GET"))
                     {
                         String path = d.processPath(input);
@@ -90,6 +90,7 @@ public class ServerThread extends Thread {
                                 pr.write("Server: Java HTTP Server: 1.0\n".getBytes());
                                 pr.write(("Date: " + new Date() + "\r\n").getBytes());
                                 pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                                pr.write(("Content-Length: " + Long.toString(f.length())+ "\r\n").getBytes());
                                 pr.write("Content-Disposition: attachment\r\n".getBytes());
                                 pr.write(("filename=\""+fname+"\"\r\n").getBytes());
                                 pr.write("\r\n".getBytes());
