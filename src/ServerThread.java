@@ -126,6 +126,7 @@ public class ServerThread extends Thread {
                     }
                     else if(input.startsWith("UPLOAD "))
                     {
+                        System.out.println("hello world");
 
                     }
                 }

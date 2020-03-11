@@ -41,13 +41,17 @@ public class HTTPServer {
         String mimeType = null;
         String status = null;
         String content = null;
+        System.out.println("connection established");
 
 
         while (true){
             Socket s = serverSocket.accept();
-            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            //BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            BufferedInputStream in = new BufferedInputStream(s.getInputStream());
             BufferedOutputStream pr = new BufferedOutputStream(s.getOutputStream());
-            String input = in.readLine();
+            System.out.println("waiting for the response from the browser");
+            //String input = new String(in.readNBytes(100));
+            String input = new String(in.readAllBytes());
             System.out.println("The response is: "+input);
 
             //to process the response and get the appropriate things to find
@@ -155,15 +159,9 @@ public class HTTPServer {
 
                     }
 
-
-
-
-
-                }
-
-                else
+                } else if(input.startsWith("UPLOAD"))
                 {
-
+                    System.out.println("Ekhane ashtese");
                 }
             }
 
