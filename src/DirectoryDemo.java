@@ -8,6 +8,10 @@ public class DirectoryDemo {
         return path.substring(path.lastIndexOf("."));
     }
 
+    public  String getFileName(String path){
+        return path.substring(0,path.lastIndexOf("."));
+    }
+
     public String procssMINEType(String ext){
         switch (ext){
             case ".txt" : return "text/plain" ;

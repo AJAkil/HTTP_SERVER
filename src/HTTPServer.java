@@ -23,18 +23,7 @@ public class HTTPServer {
                 sum+=readLength;
                 bos.write(bytearray,0,readLength);
             }
-            /*while (bis.available()>0){
-                int x = bis.read(bytearray);
-                if(x == 1024){
-                    bos.write(bytearray);
-                }else{
-                    byte[] b2 = new byte[x];
-                    for (int i = 0; i < x; i++) {
-                        b2[i] = bytearray[i];
-                    }
-                    bos.write(b2);
-                }
-            }*/
+
             System.out.println("Total sent: "+sum);
             //bos.flush();
             //bis.close();
@@ -101,12 +90,13 @@ public class HTTPServer {
                            //DataOutputStream ds = new DataOutputStream(out);
                             //BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
                             File f = new File(path);
+                            String fname = d.getFileName(path);
                             pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
                             pr.write("Server: Java HTTP Server: 1.0\n".getBytes());
                             pr.write(("Date: " + new Date() + "\r\n").getBytes());
                             pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
                             pr.write("Content-Disposition: attachment\r\n".getBytes());
-                            pr.write("filename=\"file2.txt\"\r\n".getBytes());
+                            pr.write(("filename=\""+fname+"\"\r\n").getBytes());
                             pr.write("\r\n".getBytes());
                             //bos.write(("Content-Length: " + Long.toString(f.length())+ "\r\n").getBytes());
                             sendPacketdata(pr,path);

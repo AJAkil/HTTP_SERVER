@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="612d02f0-7554-41bb-b2fa-71369b5d6ab5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Test1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Offline 1/HTTPServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Offline 1/HTTPServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Offline 1/ServerThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Offline 1/ServerThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DirectoryDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DirectoryDemo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/HTTPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HTTPServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,11 +28,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Test1.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/HTTPServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="61" column="81" lean-forward="true" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="81" />
+            <state relative-caret-position="328">
+              <caret line="98" column="38" selection-start-line="98" selection-start-column="38" selection-end-line="98" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -43,13 +40,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/HTTPServer.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DirectoryDemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="108" column="49" selection-start-line="108" selection-start-column="49" selection-end-line="108" selection-end-column="49" />
+            <state relative-caret-position="287">
+              <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#266#267#0" expanded="true" />
+                <element signature="e#324#325#0" expanded="true" />
+                <element signature="method#processPath#0;class#DirectoryDemo#0" />
+                <element signature="method#processHtml#0;class#DirectoryDemo#0" />
               </folding>
             </state>
           </provider>
@@ -95,7 +96,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServerThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2730">
+            <state relative-caret-position="2100">
               <caret line="113" column="58" lean-forward="true" selection-start-line="103" selection-start-column="36" selection-end-line="113" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -130,13 +131,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/src/DirectoryDemo.java" />
         <option value="$PROJECT_DIR$/src/HTTPServerSkeleton.java" />
         <option value="$PROJECT_DIR$/src/HTTPServer2.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
         <option value="$PROJECT_DIR$/src/ClientThread.java" />
         <option value="$PROJECT_DIR$/src/ServerThread.java" />
         <option value="$PROJECT_DIR$/src/Test1.java" />
+        <option value="$PROJECT_DIR$/src/DirectoryDemo.java" />
         <option value="$PROJECT_DIR$/src/HTTPServer.java" />
       </list>
     </option>
@@ -273,19 +274,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/DirectoryDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="93" column="62" lean-forward="true" selection-start-line="93" selection-start-column="62" selection-end-line="93" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#processPath#0;class#DirectoryDemo#0" />
-            <element signature="method#processHtml#0;class#DirectoryDemo#0" />
-            <element signature="e#1157#1712#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
@@ -324,17 +312,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ServerThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2730">
-          <caret line="113" column="58" lean-forward="true" selection-start-line="103" selection-start-column="36" selection-end-line="113" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#sendPacketdata#0;class#ServerThread#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/HTTPServerSkeleton.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
@@ -352,10 +329,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ServerThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2100">
+          <caret line="113" column="58" lean-forward="true" selection-start-line="103" selection-start-column="36" selection-end-line="113" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#sendPacketdata#0;class#ServerThread#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DirectoryDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#266#267#0" expanded="true" />
+            <element signature="e#324#325#0" expanded="true" />
+            <element signature="method#processPath#0;class#DirectoryDemo#0" />
+            <element signature="method#processHtml#0;class#DirectoryDemo#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/HTTPServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="108" column="49" selection-start-line="108" selection-start-column="49" selection-end-line="108" selection-end-column="49" />
+        <state relative-caret-position="328">
+          <caret line="98" column="38" selection-start-line="98" selection-start-column="38" selection-end-line="98" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
