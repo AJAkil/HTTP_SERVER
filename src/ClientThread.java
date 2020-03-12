@@ -47,8 +47,6 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        int c = 0;
-
             try {
                 File f = new File(uploadRequest.split(" ")[1]);
                 if(f.exists()){
@@ -62,12 +60,9 @@ public class ClientThread extends Thread {
                     System.out.println("File name is invalid");
                 }
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
     }
 
 }

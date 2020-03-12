@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ServerThread extends Thread {
     Socket socket;
-    BufferedReader in;
+    BufferedInputStream in;
     BufferedOutputStream pr = null;
     ServerThread(Socket socket) throws IOException {
         this.socket = socket;
@@ -34,6 +34,15 @@ public class ServerThread extends Thread {
         }
     }
 
+    public  String ProcessResponse(BufferedInputStream is) throws IOException {
+        byte[] byteArray;
+        while (is.available() <= 0) ;
+        byteArray = new byte[is.available()];
+        is.read(byteArray);
+        String input = new String(byteArray);
+        return input;
+    }
+
     @Override
     public void run() {
 
@@ -44,13 +53,14 @@ public class ServerThread extends Thread {
 
             String input = null;
             try {
-                this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+                this.in = new BufferedInputStream(this.socket.getInputStream());
                 pr = new BufferedOutputStream(this.socket.getOutputStream());
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                input = this.in.readLine();
+                input = ProcessResponse(in);
                 System.out.println("The response is: "+input);
 
                  if(input == null) ;
@@ -127,13 +137,42 @@ public class ServerThread extends Thread {
                     }
                     else if(input.startsWith("UPLOAD "))
                     {
-                        System.out.println("hello world");
+                        System.out.println("Ekhane ashtese");
 
+                        String splittedString[] = input.split(" ");
+
+                        byte[] bytearray = new byte[1024];
+                        FileOutputStream out = null;
+                        try {
+                            File f = new File("root/"+splittedString[1]);
+                            out = new FileOutputStream(f);
+                            BufferedOutputStream bos = new BufferedOutputStream(out);
+
+                            int readLength = -1;
+                            int sum = 0;
+
+                            String fileSize = splittedString[2];
+
+                            while ((readLength = in.read(bytearray)) > 0) {
+                                bos.write(bytearray, 0, readLength);
+                                sum+=readLength;
+                                if(sum == Integer.parseInt(fileSize))break;
+                            }
+
+
+                            System.out.println("merging sesh!");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }else if(input.startsWith("Invalid")){
+                        System.out.println("File name is invalid");
                     }
                 }
                 try {
                     this.in.close();
                     this.socket.close();
+                    System.out.println("Connection closed");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
