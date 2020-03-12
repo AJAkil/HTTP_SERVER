@@ -1,8 +1,10 @@
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class HTTPServer {
@@ -19,19 +21,28 @@ public class HTTPServer {
             int sum = 0;
 
             int readLength = -1;
-            while ((readLength = bis.read(bytearray))>0){
-                sum+=readLength;
-                bos.write(bytearray,0,readLength);
+            while ((readLength = bis.read(bytearray)) > 0) {
+                sum += readLength;
+                bos.write(bytearray, 0, readLength);
             }
 
-            System.out.println("Total sent: "+sum);
+            System.out.println("Total sent: " + sum);
             //bos.flush();
             //bis.close();
             //bos.close();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String ProcessResponse(BufferedInputStream is) throws IOException {
+        byte[] byteArray;
+        while (is.available() <= 0) ;
+        byteArray = new byte[is.available()];
+        is.read(byteArray);
+        String input = new String(byteArray);
+        return input;
     }
 
     public static void main(String[] args) throws IOException {
@@ -44,15 +55,19 @@ public class HTTPServer {
         System.out.println("connection established");
 
 
-        while (true){
+        while (true) {
             Socket s = serverSocket.accept();
+            System.out.println("connection done");
             //BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            BufferedInputStream in = new BufferedInputStream(s.getInputStream());
+            //BufferedInputStream in = new BufferedInputStream(s.getInputStream());
+            BufferedInputStream is = new BufferedInputStream(s.getInputStream());
             BufferedOutputStream pr = new BufferedOutputStream(s.getOutputStream());
             System.out.println("waiting for the response from the browser");
-            //String input = new String(in.readNBytes(100));
-            String input = new String(in.readAllBytes());
-            System.out.println("The response is: "+input);
+
+            String input = ProcessResponse(is);
+            //String input = new String(in.readAllBytes());
+            System.out.println("The response is: " + input);
+
 
             //to process the response and get the appropriate things to find
 
@@ -60,29 +75,28 @@ public class HTTPServer {
             // the directory traversal function with this as our path, then we would get the list of all the files and folders under those directory, if exists, and then
             //we call a function to dynamically generate a HTMl file. We pass in the list a parameter to the function
 
-            if(input == null) continue;
-            if(input.length() > 0) {
-                if(input.startsWith("GET"))
-                {
+            if (input == null) continue;
+            if (input.length() > 0) {
+                if (input.startsWith("GET")) {
                     String path = d.processPath(input);
 
-                    if(d.doesExist(path)){
+                    if (d.doesExist(path)) {
                         status = "200 OK";
-                        if(d.isDirectory(path)){
+                        if (d.isDirectory(path)) {
 
                             content = d.processHtml(d.ShowDirectory(path));
                             mimeType = "text/html";
                             //common for now
-                            pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                            pr.write(("HTTP/1.1 " + status + "\r\n").getBytes());
                             pr.write("Server: Java HTTP Server: 1.0\r\n".getBytes());
                             pr.write(("Date: " + new Date() + "\r\n").getBytes());
-                            pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                            pr.write(("Content-Type: " + mimeType + "\r\n").getBytes());
                             pr.write(("Content-Length: " + content.length() + "\r\n").getBytes());
                             pr.write("\r\n".getBytes());
                             pr.write(content.getBytes());
                             pr.flush();
 
-                        }else{
+                        } else {
 
                             String extension = d.getExtension(path);
                             mimeType = d.procssMINEType(extension);
@@ -91,19 +105,19 @@ public class HTTPServer {
                             System.out.println("Not a folder");
 
                             //ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-                           //DataOutputStream ds = new DataOutputStream(out);
+                            //DataOutputStream ds = new DataOutputStream(out);
                             //BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
                             File f = new File(path);
                             String fname = d.getFileName(path);
-                            pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                            pr.write(("HTTP/1.1 " + status + "\r\n").getBytes());
                             pr.write("Server: Java HTTP Server: 1.0\n".getBytes());
                             pr.write(("Date: " + new Date() + "\r\n").getBytes());
-                            pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                            pr.write(("Content-Type: " + mimeType + "\r\n").getBytes());
                             pr.write("Content-Disposition: attachment\r\n".getBytes());
-                            pr.write(("filename=\""+fname+"\"\r\n").getBytes());
+                            pr.write(("filename=\"" + fname + "\"\r\n").getBytes());
                             pr.write("\r\n".getBytes());
                             //bos.write(("Content-Length: " + Long.toString(f.length())+ "\r\n").getBytes());
-                            sendPacketdata(pr,path);
+                            sendPacketdata(pr, path);
                             pr.flush();
                             /*String stuff = "HTTP/1.1 "+status+"\r\n";
                             //out.writeObject();
@@ -134,7 +148,7 @@ public class HTTPServer {
 
                         }
 
-                    }else{
+                    } else {
                         status = "404 PAGE NOT FOUND";
                         System.out.println("404 PAGE NOT FOUND");
                         content = d.processHtml(d.ShowDirectory(path));
@@ -148,10 +162,10 @@ public class HTTPServer {
                                 "\t</body>\n" +
                                 "</html>";
 
-                        pr.write(("HTTP/1.1 "+status+"\r\n").getBytes());
+                        pr.write(("HTTP/1.1 " + status + "\r\n").getBytes());
                         pr.write("Server: Java HTTP Server: 1.0\r\n".getBytes());
                         pr.write(("Date: " + new Date() + "\r\n").getBytes());
-                        pr.write(("Content-Type: "+mimeType+"\r\n").getBytes());
+                        pr.write(("Content-Type: " + mimeType + "\r\n").getBytes());
                         pr.write(("Content-Length: " + content.length() + "\r\n").getBytes());
                         pr.write("\r\n".getBytes());
                         pr.write(content.getBytes());
@@ -159,15 +173,45 @@ public class HTTPServer {
 
                     }
 
-                } else if(input.startsWith("UPLOAD"))
-                {
+                } else if (input.startsWith("UPLOAD")) {
                     System.out.println("Ekhane ashtese");
+
+                    String splittedString[] = input.split(" ");
+
+                    byte[] bytearray = new byte[1024];
+                    FileOutputStream out = null;
+                    try {
+                        File f = new File("root/"+splittedString[1]);
+                        out = new FileOutputStream(f);
+                        BufferedOutputStream bos = new BufferedOutputStream(out);
+
+                        int readLength = -1;
+                        int available = is.available();
+                        int sum = 0;
+
+                        String fileSize = splittedString[2];
+
+                            while ((readLength = is.read(bytearray)) > 0) {
+                                bos.write(bytearray, 0, readLength);
+                                sum+=readLength;
+                                if(sum == Integer.parseInt(fileSize))break;
+                            }
+
+
+                        System.out.println("merging sesh!");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (input.startsWith("Invalid")) {
+                    System.out.println("File name is invalid");
                 }
+
+                is.close();
+                pr.close();
+                s.close();
+                System.out.println("bondho hoye gese");
             }
-
-
-
-            s.close();
         }
     }
+
 }

@@ -5,15 +5,20 @@ import java.util.Scanner;
 
 public class ClientThread extends Thread {
     Socket socket;
-    BufferedOutputStream out;
+    OutputStream out;
+    BufferedWriter bw;
+    PrintWriter pw;
+    String uploadRequest;
     final int sizeOfPacket = 1024;
 
-    ClientThread(Socket socket) throws IOException {
+    ClientThread(Socket socket, String uploadRequest) throws IOException {
         this.socket = socket;
-        this.out = new BufferedOutputStream(this.socket.getOutputStream());
+        this.out = socket.getOutputStream();
+        this.uploadRequest = uploadRequest;
+        pw = new PrintWriter(this.out);
     }
 
-    public void sendPacketdata(BufferedOutputStream bos, String path) throws IOException {
+    public void sendPacketdata(OutputStream os, String path) throws IOException {
         byte[] bytearray = new byte[sizeOfPacket];
         FileInputStream in = null;
         try {
@@ -21,9 +26,12 @@ public class ClientThread extends Thread {
             in = new FileInputStream(f);
             BufferedInputStream bis = new BufferedInputStream(in);
 
+            os.flush();
+            System.out.println(f.length());
+
             int readLength = -1;
             while ((readLength = bis.read(bytearray)) > 0) {
-                bos.write(bytearray, 0, readLength);
+                os.write(bytearray, 0, readLength);
             }
 
             //System.out.println("Total sent: "+sum);
@@ -39,19 +47,27 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        int c = 0;
+
             try {
-                System.out.println("Pathao");
-                this.out.write("UPLOAD".getBytes());
-                System.out.println("pathai dilam");
-                Scanner scan  = new Scanner(System.in);
-                //scan.nextLine();
+                File f = new File(uploadRequest.split(" ")[1]);
+                if(f.exists()){
+
+                    String s = uploadRequest+" "+(f.length());
+                    out.write(s.getBytes());
+                    sendPacketdata(out,uploadRequest.split(" ")[1]);
+
+                }else{
+                    out.write("Invalid".getBytes());
+                    System.out.println("File name is invalid");
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        }
+
     }
 
 }

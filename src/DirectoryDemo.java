@@ -32,12 +32,14 @@ public class DirectoryDemo {
 
     public String processPath(String path){
         String name = null;
+        System.out.println("PRCOESS PATH IS CALLED WITH: "+path);
 
             String[]separatedValues = path.split(" ");
             String pathFromURL = separatedValues[1];
-            //System.out.println("The path from URL is : " + pathFromURL);
+            System.out.println("The path from URL is : " + pathFromURL);
 
             name = pathFromURL.substring(1);
+            System.out.println(name);
 
         return name;
     }

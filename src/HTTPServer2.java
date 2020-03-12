@@ -33,6 +33,7 @@ public class HTTPServer2 {
 
         while (true){
             Socket s = serverSocket.accept();
+            System.out.println("accepted connection");
             Thread t = new ServerThread(s);
             t.start();
         }

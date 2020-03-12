@@ -53,10 +53,11 @@ public class ServerThread extends Thread {
                 input = this.in.readLine();
                 System.out.println("The response is: "+input);
 
-                if(input == null){} ;
-                if(input.length() > 0 && input!= null) {
+                 if(input == null) ;
+                else  if( input.length()>0) {
                     if(input.startsWith("GET"))
                     {
+                        System.out.println("BEFORE PROCESSING: "+input);
                         String path = d.processPath(input);
 
                         if(d.doesExist(path)){
